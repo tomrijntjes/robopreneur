@@ -2,6 +2,7 @@
 import os
 from uuid import uuid4
 import csv
+import time
 
 from flask import Flask, redirect, url_for, request, render_template,make_response,jsonify,session,Response
 from pymongo import MongoClient
@@ -27,11 +28,23 @@ app.config.from_object(__name__)
 Session(app)
 
 
-conn = pymysql.connect(host="robopreneur_mysql_1",
+
+def get_cursor(timeout=3):
+    if timeout <1:
+        raise Exception("SQL Connection timed out.")
+    try:
+        conn = pymysql.connect(host="robopreneur_mysql_1",
                            user = "root",
                            passwd = os.environ['MYSQL_ROOT_PASSWORD'],
                            db = os.environ['DATABASE'])
-cursor = conn.cursor()
+        cursor = conn.cursor()
+        return cursor
+    except:
+        time.sleep(2)
+        get_cursor(timeout-1)
+
+cursor = get_cursor(3)
+
 
 
 @app.route('/')
