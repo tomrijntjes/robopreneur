@@ -26,13 +26,13 @@ SESSION_MONGODB = MongoClient(os.environ['MONGO_1_PORT_27017_TCP_ADDR'],27017)
 app.config.from_object(__name__)
 Session(app)
 
-"""
+
 conn = pymysql.connect(host="robopreneur_mysql_1",
                            user = "root",
                            passwd = os.environ['MYSQL_ROOT_PASSWORD'],
                            db = os.environ['DATABASE'])
 cursor = conn.cursor()
-"""
+
 
 @app.route('/')
 def home():
