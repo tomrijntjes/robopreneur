@@ -1,0 +1,30 @@
+data:
+  build: data/.
+mysql:
+  image: mysql
+  env_file:
+    - .env
+  volumes:
+    - ./sql:/sql
+    - ./init:/docker-entrypoint-initdb.d
+  volumes_from:
+    - data
+
+mongo:
+  image: mongo:3.0.2
+  volumes_from:
+    - data
+  command: --smallfiles
+
+web:
+  build: web/.
+  command: python3 -u web/app.py
+  ports:
+    - "80:80"
+  volumes:
+    - .:/robo
+  links:
+    - mysql:db
+    - mongo
+  env_file:
+    - .env

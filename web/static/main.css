@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-input-placeholder {
+    color: white;
+}
+
+hr {
+    border-color: #ececec;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: "Open Sans", serif;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+.clear {
+    clear: both;
+}
+
+h1 {
+    color: #4A545A;
+    font-size: 26px;
+    font-weight: 600;
+    margin-top: 0px;
+}
+
+h2 {
+    color: #4A545A;
+    font-size: 24px;
+}
+
+p {
+    color: #87909b;
+    line-height: 22px;
+}
+
+.page_wrap {
+    min-height: 100%;
+    margin-bottom: 50px;
+}
+
+.page_wrap:after {
+    content: "";
+    display: block;
+}
+
+/* Header */
+header {
+    background-color: #45B6AF;
+    padding-bottom: 20px;
+    height: 160px;
+}
+
+#logo {
+    color: white;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: lighter;
+    letter-spacing: 2px;
+    text-decoration: none;
+    font-family: Montserrat, 'Open Sans', Helvetica, Arial;
+    margin-top: 20px;
+    display: block;
+}
+
+#search_form {
+    position: relative;
+    margin-top: 10px;
+}
+
+#search_form input[type=text] {
+    color: white;
+    border: 0px;
+    border-bottom: 2px solid white;
+    outline: none;
+    font-size: 17px;
+    height: 50px;
+    width: 85%;
+    float: left;
+    background: rgba(255, 255, 255, 0.3);
+    text-indent: 15px;
+}
+
+#search_form button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    float: left;
+    width: 14%;
+    margin-left: 1%;
+    height: 50px;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 15px;
+    color: white;
+    text-transform: uppercase;
+    border-bottom: 2px solid white;
+}
+
+.product_count {
+    color: white;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    height: 30px;
+    line-height: 50px;
+}
+
+.product_count.left {
+    text-align: left;
+}
+
+.image_not_found {
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    max-height: 80%;
+    display: none;
+    z-index: -1;
+    max-width: 150px;
+}
+
+/* Content */
+.content {
+    padding-top: 30px;
+}
+
+/* Footer */
+#footer {
+    background-color: #2b2f33;
+    height: 250px;
+    text-align: center;
+    padding-top: 100px;
+    font-family: Montserrat, 'Open Sans', Helvetica, Arial;
+}
+
+.footer_link {
+    margin: 10px;
+    color: #c4c8cd;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.footer_link:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.site_info {
+    color: #87909b;
+    margin-top: 20px;
+    text-align: center;
+    display: block;
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: 0;
+    font-family: "Open Sans", sans serif;
+    text-transform: none;
+}

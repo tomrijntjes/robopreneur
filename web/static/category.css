@@ -1,0 +1,89 @@
+header {
+    height: 60px!important;
+    background-color: white;
+}
+
+#logo {
+    color: #FF7302;
+}
+
+.content {
+    padding-top: 0px;
+}
+
+#search_results {
+    background-color: white;
+}
+
+.product {
+    width: 100%;
+    position: relative;
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px dashed #ececec;
+}
+
+.action_ribbon {
+    background-image: url(/img/action_ribbon.png);
+    height: 115px;
+    width: 115px;
+    background-size: cover;
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    display: none;
+}
+
+.product.action .action_ribbon {
+    display: block;
+}
+
+.product_image {
+    background-size: 60%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    background-position: center center;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto;
+    display: block;
+}
+
+.large_product_image {
+    height: 250px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    background-position: center center;
+    background-image: url(/img/vitamins.jpg);
+}
+
+.product_information {
+    padding-top: 5px;
+}
+
+.product_information {
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.visit_merchant_button {
+    border-color: #FF7302;
+    background-color: #FF7302;
+    font-size: 13px;
+    text-align: center;
+    padding: 6px 16px;
+    margin-bottom: 10px;
+    display: inline-block;
+    line-height: 22px;
+    color: #fff;
+    text-transform: uppercase;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.visit_merchant_button:hover {
+    color: white;
+}

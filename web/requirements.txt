@@ -1,0 +1,6 @@
+flask
+Flask-Session
+pymongo
+numpy
+deap
+pymysql
