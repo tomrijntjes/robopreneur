@@ -20,7 +20,7 @@ from gpsql.breeder import Breeder
 
 
 app = Flask(__name__)
-breeder = Breeder()
+#breeder = Breeder()
 
 SESSION_TYPE = 'mongodb'
 SESSION_MONGODB = MongoClient(os.environ['MONGO_1_PORT_27017_TCP_ADDR'],27017)
@@ -49,14 +49,13 @@ cursor = get_cursor(3)
 
 @app.route('/')
 def home():
-    return make_response(jsonify({'success': 'DNS records check out. Version: 0.10'}), 200)
-    """
+    breeder = Breeder(2,purge=True)
+    POPULATION = len(breeder.population)
     if not 'sid' in session or not session['sid']:
         session['sid'] = str(uuid4())
     instance_number = abs(hash(session['sid']))%POPULATION
-    #collect products from db with id and parse data
-    args = list(range(3531843,3531852))
-    sql='SELECT `id`, `name`, `price`, `image_medium_url`,`price_old` FROM merchant_product WHERE id IN (%s)' 
+    args = breeder.population[instance_number]['ids']
+    sql='SELECT `id`, `name`, `price`, `image_medium_url`,`price_old` FROM gieters WHERE id IN (%s) LIMIT 9' 
     in_p=', '.join(list(map(lambda x: '%s', args)))
     sql = sql % in_p
     cursor.execute(sql, args)
@@ -64,8 +63,7 @@ def home():
     #raise Exception(products)
     page = render_template('index.html',products=products)
     return page
-    """
-
+    
 @app.route('/redirect')
 def redirect():
     outbound="http://www.geenstijl.nl"
