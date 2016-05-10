@@ -79,6 +79,11 @@ def track(product_id):
     outbound = "http://shopsaloon.com/product/visit/"+product_id
     return render_template('redirect.html',outbound = outbound)
 
+@app.route("/purge/<pw>")
+def purge_data(pw):
+    if pw == os.environ['DATABASE']:
+        breeder.
+
 @app.route("/newsession")
 def new_session():
     session['sid'] = None   
@@ -101,4 +106,4 @@ def parse_record(record):
    
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True,port=80)
+    app.run(host='0.0.0.0', debug=False,port=80)
