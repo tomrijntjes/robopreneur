@@ -81,8 +81,8 @@ def track(product_id):
 
 @app.route("/purge/<pw>")
 def purge_data(pw):
-    if pw == os.environ['DATABASE']:
-        breeder.
+    if pw == os.environ['shopsaloon']:
+        pass
 
 @app.route("/newsession")
 def new_session():
@@ -106,4 +106,4 @@ def parse_record(record):
    
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=False,port=80)
+    app.run(host='0.0.0.0', debug=True,port=80)
