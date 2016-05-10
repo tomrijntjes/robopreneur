@@ -1,0 +1,12 @@
+<html>
+<table>
+{% for individual in population %}
+<TR>
+   <TD class="c1">{{individual.mongo_id}}</TD>
+   <TD class="c2">{{individual.query}}</TD>
+   <TD class="c3">{{individual.energy}}</TD>
+   <TD class="c4"><SPAN>{{individual.ids}}</SPAN></TD>
+</TR>
+{% endor %}
+</table>
+</html> 

@@ -54,18 +54,10 @@
 
                     <div class="col-md-8" style="padding-left: 30px;">
                         <br>
-                        <h4>Vitamine C</h4>
-                        <p>Vitamine C heb je nodig voor een goede 
-weerstand en voldoende energie. Hiernaast draagt vitamine C bij aan een 
-goed functionerend zenuwstelsel, gezonde botten, tanden, huid en 
-bloedvaten.</p>
-                        <p>Het menselijk lichaam is niet in staat om 
-zelf vitamine C aan te maken. De hoeveelheid vitamine C in het lichaam 
-moet op pijl gehouden worden doormiddel van de voeding.</p>
-                        <p>Om je lichaam een handje te helpen bij de 
-vitamine C behoefte, kun je supplementen innemen. Op deze pagina vind je
- een overzicht van veelgebruikte vitamine C supplementen van betrouwbare
- aanbieders.</p>
+                        <h4>I want to learn your watering can preferences</h4>
+                        <p>To be more precise, I'm trying to find out whether I can learn about your watering can preferences by treating this online store as a species of living shops. In technical terms, an artificial life type selection mechanism drives a genetic programming core which evolves the SQL-queries that result in the products you are looking at. Darwinism in action, baby.</p>
+                        <p>To participate in the experiment, imagine you are in dire need of a watering can. Click products you find interesting and the store adapts to your behaviour. Didn't find anything of your liking? Come back tomorrow: the offering will change based on your interests.</p>
+                        <p>Thanks so much for participating!</p>
                     </div>
 
                     <div class="clear"></div>
@@ -80,17 +72,24 @@ vitamine C behoefte, kun je supplementen innemen. Op deze pagina vind je
                             <div class="product">
                                 <div class="row">
                                     <div class="col-md-5">
-                                        <a href="http://shopsaloon.com/product/visit/{{product.id}}" rel="nofollow" target="_blank" class="product_image" style="background-image: url({{product.image_medium_url}}"></a>
+                                        <a href="/tracking/{{product.id}}" rel="nofollow" target="_blank" class="product_image" style="background-image: url(
+{% if product.image_medium_url is not none %}
+                                        {{product.image_medium_url}}
+                                        {% elif product.image_small_url is not none %}
+                                        {{product.image_small_url}}
+                                        {% else %}
+                                        {{product.image_large_url}}
+                                        {% endif %}"></a>
                                     </div>
                                     <div class="col-md-7">
                                         <div class="product_information">
                                             <h5 style="margin-bottom: 5px; height: 32px; overflow: hidden;">{{product.name}}</h5>
-                                                    {% if product.price_old is not none %}
+                                                    {% if product.price_old > product.price_old %}
                                                         <span style="color: gray; font-style: italic;">(€<del>{{product.price_old}}</del>)</span>
                                                     {% endif %}
                                                     <strong style="color: #45B6AF; font-size: 15px;">€ {{product.price}}</strong>
                                             <br><br>
-                                            <a href="http://shopsaloon.com/product/visit/{{product.id}}" rel="nofollow" target="_blank" class="visit_merchant_button">Bekijk product »</a>
+                                            <a href="/tracking/{{product.id}}" rel="nofollow" target="_blank" class="visit_merchant_button">Bekijk product »</a>
                                         </div>
                                     </div>
                                 </div>
