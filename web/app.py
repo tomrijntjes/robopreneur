@@ -71,17 +71,17 @@ def overview():
     return page
     
 @app.route('/tracking/<product_id>')
-def redirect(product_id):
-    #raise Exception("redirect link works")
+def track(product_id):
     instance_number = abs(hash(session['sid']))%len(breeder.population)
     breeder.population[instance_number]['energy']+=1
-    #breeder.update_queue()
+    breeder.update_queue()
+    breeder.write_population()
     outbound = "http://shopsaloon.com/product/visit/"+product_id
     return render_template('redirect.html',outbound = outbound)
 
-@app.route("/new_session")
+@app.route("/newsession")
 def new_session():
-    session['sid'] = None
+    session['sid'] = None   
     return redirect(url_for('home'))
 
 @app.route('/dump')

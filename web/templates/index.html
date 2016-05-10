@@ -7,7 +7,12 @@
 
     <title>    Online vitamine C kopen? Bekijk het aanbod op ShopSaloon!
 </title>
-
+<link href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
     
     <link rel="stylesheet" href="static/css_003.css" type="text/css" media="all">
     <link rel="stylesheet" href="static/css_002.css" type="text/css">
@@ -29,12 +34,10 @@
                     <div class="col-md-12">
                         <h1 class="pull-left">
                             <a href="http://shopsaloon.com/products" title="ShopSaloon" id="logo">
-                                <i class="fa fa-shopping-cart"></i> ShopSaloon
+                                <i class="fa fa-shopping-cart"></i> This project is supported by ShopSaloon
                             </a>
                         </h1>
-                        <div class="clear"></div>
-                            <div class="pull-right" style="line-height: 60px; font-family: 'Handlee', cursive; font-size: 20px;">Al 1438 mensen gingen je voor!</div>
-                    </div>
+
                 </div>
             </div>
         </header>
@@ -56,8 +59,11 @@
                         <br>
                         <h4>I want to learn your watering can preferences</h4>
                         <p>To be more precise, I'm trying to find out whether I can learn about your watering can preferences by treating this online store as a species of living shops. In technical terms, an artificial life type selection mechanism drives a genetic programming core which evolves the SQL-queries that result in the products you are looking at. Darwinism in action, baby.</p>
-                        <p>To participate in the experiment, imagine you are in dire need of a watering can. Click products you find interesting and the store adapts to your behaviour. Didn't find anything of your liking? Come back tomorrow: the offering will change based on your interests.</p>
+                        <p>To participate in the experiment, imagine you are in dire need of a watering can. Click products you find interesting and the store adapts to your behaviour. Didn't find anything of your liking? Come back tomorrow: the offering will change based on the interests of people like you. There's a signup form for a daily reminder below - I'll acknowledge your participation in the paper if you sign up :)</p>
                         <p>Thanks so much for participating!</p>
+
+                        <p>Want to check out a different variety of this story right now? <a href="/newsession">Click here</a>, but note that different generations can have an equal or similar fenotype.</p>
+                        <p>Interested in the genotype of ALL THE STORES? <a href="/population">Check it out.</a></p>
                     </div>
 
                     <div class="clear"></div>
@@ -65,7 +71,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 style="margin-bottom: 20px; color: #FF7302">Vandaag in de aanbieding</h4>
+                        <h4 style="margin-bottom: 20px; color: #FF7302">Today's hot watering cans</h4>
                     </div>
 {% for product in products %}
                                             <div class="col-md-6 col-lg-4 col-sm-6 col-xs-12">
@@ -84,12 +90,12 @@
                                     <div class="col-md-7">
                                         <div class="product_information">
                                             <h5 style="margin-bottom: 5px; height: 32px; overflow: hidden;">{{product.name}}</h5>
-                                                    {% if product.price_old > product.price_old %}
+                                                    {% if product.price_old|float > product.price|float %}
                                                         <span style="color: gray; font-style: italic;">(€<del>{{product.price_old}}</del>)</span>
                                                     {% endif %}
                                                     <strong style="color: #45B6AF; font-size: 15px;">€ {{product.price}}</strong>
                                             <br><br>
-                                            <a href="/tracking/{{product.id}}" rel="nofollow" target="_blank" class="visit_merchant_button">Bekijk product »</a>
+                                            <a href="/tracking/{{product.id}}" rel="nofollow" target="_blank" class="visit_merchant_button">Visit product page »</a>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +113,37 @@
             </div>
         </div>
     </div>
+<!-- Begin MailChimp Signup Form -->
 
+<div id="mc_embed_signup">
+<form action="//tomrijntjes.us12.list-manage.com/subscribe/post?u=2655d27d2c824e8f4fee49bb8&amp;id=83686a5f44" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <h2>Subscribe for a daily reminder for just 7 days and the resulting paper. Thanks!</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+<div class="mc-field-group">
+    <label for="mce-FNAME">First Name </label>
+    <input type="text" value="" name="FNAME" class="" id="mce-FNAME">
+</div>
+<div class="mc-field-group">
+    <label for="mce-LNAME">Last Name </label>
+    <input type="text" value="" name="LNAME" class="" id="mce-LNAME">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_2655d27d2c824e8f4fee49bb8_83686a5f44" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+<script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
+<!--End mc_embed_signup-->
     <div id="footer">
         <div class="container">
             <a class="footer_link" href="http://shopsaloon.com/">Shopsaloon.com</a>

@@ -28,7 +28,7 @@ class Breeder:
 	"""
 	Shelve class holding a population.
 	"""
-	def __init__(self,n=2,threshold=1,reproduction_cost=10,purge=False):
+	def __init__(self,n=2,threshold=10,reproduction_cost=10,purge=False):
 		self.queue = list()
 		self.threshold = threshold
 		self.reproduction_cost = 1
@@ -65,7 +65,15 @@ class Breeder:
 			self.population=list()
 			for indi in self.mongo.breeder.population.find():
 				genome=pickle.loads(indi['genome'])
-				self.population.append({'genome':genome,'energy':indi['energy'],'query':indi['query'],'ids':indi['ids'],'mongo_id':indi['_id']})
+				self.population.append(
+					{
+					'genome':genome,
+					'energy':indi['energy'],
+					'query':indi['query'],
+					'ids':indi['ids'],
+					'mongo_id':indi['_id']
+					}
+					)
 		if purge or "breeder" not in self.mongo.database_names():
 			self.population=list()
 			for genome in [self.create_individual for i in range(n)]:
@@ -153,8 +161,6 @@ class Breeder:
 		elif query[:4] == 'and_':
 			chunks = self.chunk(query[5:])
 			return '('+self.parse_query(chunks[0]) +') AND (' +self.parse_query(chunks[1])+')'
-	#	elif query[:4] == 'not_':
-	#		return 'NOT ('+ parse_query(query[5:-1])+')'
 		elif query[:2] == 'lt':
 			chunks = self.chunk(query[3:])
 			return self.parse_query(chunks[0]) +' < ' +self.parse_query(chunks[1])
@@ -173,7 +179,7 @@ class Breeder:
 				closure -=1
 			elif closure==0 and inputstr[i] == ',':
 				return (inputstr[:i],inputstr[i+2:-1])
-				
+
 	def get_cursor(self,timeout=3):
 	    if timeout <1:
 	        raise Exception("SQL Connection timed out.")
