@@ -106,4 +106,4 @@ def parse_record(record):
    
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True,port=80)
+    app.run(host='0.0.0.0', debug=os.environ['DEBUG'],port=80)
