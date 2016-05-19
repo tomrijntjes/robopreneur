@@ -88,8 +88,22 @@ class Breeder:
 		return self
 
 	def create_individual(self,parent1=None,parent2=None):
+		highest_id_indi = self.mongo.breeder.population.find_one(sort=[("instance_number", -1)])
+		if highest_id_indi is None:
+			next_id = 0
+		else:
+			next_id = highest_id_indi['instance_number']+1
 		if not parent1 and not parent2:
 			genome1,genome2 = self.toolbox.population(n=2)
+			self.mongo.breeder.events.insert_one(
+					{
+						'type':'birth',
+						'datetime':datetime.datetime.now(),
+						'instance_number':next_id,
+						'parent1':None,
+						'parent2':None
+					}
+			)
 		else:
 			#reduce energy of parents by reproduction costs
 			parent1['energy']-=self.reproduction_cost
@@ -97,15 +111,17 @@ class Breeder:
 			self.write(parent1)
 			self.write(parent2)
 			genome1,genome2 = parent1['genome'],parent2['genome']
+			self.mongo.breeder.events.insert_one(
+					{
+						'type':'birth',
+						'datetime':datetime.datetime.now(),
+						'instance_number':next_id,
+						'parent1':parent1['instance_number'],
+						'parent2':parent2['instance_number']
+					}
+			)
 		genome = self.toolbox.mate(genome1,genome2)[0]
 		query,ids=self.evaluate(genome)
-		#raise Exception(ids)
-		energy=0
-		highest_id_indi = self.mongo.breeder.population.find_one(sort=[("instance_number", -1)])
-		if highest_id_indi is None:
-			next_id = 0
-		else:
-			next_id = highest_id_indi['instance_number']+1
 		self.mongo.breeder.population.insert_one(
 					{
 						'energy':10,
@@ -115,15 +131,6 @@ class Breeder:
 						'instance_number':next_id
 					}
 					)
-		self.mongo.breeder.events.insert_one(
-					{
-						'type':'birth',
-						'datetime':datetime.datetime.now(),
-						'instance_number':next_id,
-						'parent1':parent1['instance_number'],
-						'parent2':parent2['instance_number']
-					}
-			)
 
 		return {'genome':genome,'energy':10,'query':query,'ids':ids,'instance_number':next_id}
 
