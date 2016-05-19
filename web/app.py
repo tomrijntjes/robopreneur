@@ -3,6 +3,8 @@ import os
 from uuid import uuid4
 import csv
 import time
+import random
+import datetime
 
 from flask import Flask, redirect, url_for, request, render_template,make_response,jsonify,session,Response
 from pymongo import MongoClient
@@ -28,6 +30,8 @@ Session(app)
 
 breeder = Breeder()
 
+random.seed(10)
+
 
 
 def get_cursor(timeout=3):
@@ -41,7 +45,7 @@ def get_cursor(timeout=3):
         cursor = conn.cursor()
         return cursor
     except:
-        time.sleep(2)
+        time.sleep(10)
         get_cursor(timeout-1)
 
 cursor = get_cursor(3)
@@ -53,51 +57,105 @@ def home():
     if not 'sid' in session or not session['sid']:
         session['sid'] = str(uuid4())
     #load population
-    POPULATION = len(breeder.population)
-    instance_number = abs(hash(session['sid']))%POPULATION
-    args = breeder.population[instance_number]['ids']
-    sql='SELECT `id`, `name`, `price`, `image_small_url`,`image_medium_url`,`image_large_url`,`price_old` FROM gieters WHERE id IN (%s) AND `deleted_at` is NULL LIMIT 9' 
+    pop_size = breeder.mongo.breeder.population.count()
+    if pop_size < 10:
+        for i in range(10):
+            breeder.create_individual() 
+        return "Initiating a new population. Have fun."
+    instance_number = abs(hash(session['sid']))%int(pop_size*1.25)
+    if instance_number<pop_size:
+        instance = breeder.instance(instance_number)
+        args = instance['ids']
+        query = instance['query']
+    else:
+        #create pseudorandom selection from the entire set
+        query = None
+        start = instance_number%len(breeder.all_ids)
+        args = breeder.all_ids[start-9:start]
+    if len(args)<1:
+        return render_template('emptyset.html',instance=instance_number,sql=query)
+    sql='SELECT `id`, `name`, `price`, `image_small_url`,`image_medium_url`,`image_large_url`,`price_old` FROM gieters WHERE id IN (%s) AND `deleted_at` is NULL' 
     in_p=', '.join(list(map(lambda x: '%s', args)))
     sql = sql % in_p
     cursor.execute(sql, args)
-    products = [dict(zip(['id','name','price','image_small_url','image_medium_url','image_large_url','price_old'],_)) for _ in cursor.fetchall()]
-    page = render_template('index.html',products=products,instance=instance_number,session=session['sid'])
+    products = list(cursor.fetchall())
+    while len(products)>9:
+        products.pop(instance_number%len(products))
+    productset = [dict(zip(['id','name','price','image_small_url','image_medium_url','image_large_url','price_old'],_)) for _ in products]
+    page = render_template('index.html',products=productset,instance=instance_number,sql=query,session=session['sid'],numberofproducts=len(products))
     return page
 
 @app.route('/population')
 def overview():
-    data = list(breeder.mongo.breeder.population.find())
-    page = render_template('population.html',pop=data)
+    pop = list(breeder.mongo.breeder.population.find())
+    click_events = list(breeder.mongo.breeder.click_events.find())
+    pop_events = list(breeder.mongo.breeder.events.find())
+    page = render_template('population.html',pop=pop,click_events=click_events,pop_events=pop_events)
     return page
+
+@app.route('/dump/<dataset>')
+def dump_data(dataset):
+    if dataset=='pop':
+        data = list(breeder.mongo.breeder.population.find())
+    elif dataset=='clicks':
+        data = list(breeder.mongo.breeder.click_events.find())
+    elif dataset=='events':
+        data = list(breeder.mongo.breeder.events.find())
+
+
+
+    raise Exception(data)
+
+    csv = ''.join(data)
+    return Response(csv,
+                    mimetype="text/csv",
+                    headers={"Content-disposition":"attachment; filename=logs.csv"})
     
 @app.route('/tracking/<product_id>')
 def track(product_id):
-    instance_number = abs(hash(session['sid']))%len(breeder.population)
-    breeder.population[instance_number]['energy']+=1
+    pop_size = breeder.mongo.breeder.population.count()
+    instance_number = abs(hash(session['sid']))%int(pop_size*1.25)
+    if instance_number>pop_size:
+        #random page led to conversion event
+        start = instance_number%len(breeder.all_ids)
+        args = breeder.all_ids[start-9:start]
+        breeder.mongo.breeder.click_events.insert_one(  
+                {
+                'instance_number':'random',
+                'datetime':datetime.datetime.now()
+                }
+            )
+    else:
+        instance = breeder.instance(instance_number)
+        instance['energy']+=1
+        breeder.write(instance)
+        #log click event
+        breeder.mongo.breeder.click_events.insert_one(
+            {
+            'instance_number':instance_number,
+            'datetime':datetime.datetime.now()
+            }
+        )   
+    #update queue
     breeder.update_queue()
-    breeder.write_population()
     outbound = "http://shopsaloon.com/product/visit/"+product_id
     return render_template('redirect.html',outbound = outbound)
 
 @app.route("/purge/<pw>")
 def purge_data(pw):
-    if pw == os.environ['shopsaloon']:
-        pass
+    if pw == os.environ['DATABASE']:
+        breeder.mongo["breeder"].drop_collection('population')
+        breeder.mongo["breeder"].drop_collection('click_events')
+        breeder.mongo["breeder"].drop_collection('events')
+        return 'dropped table'
+    return 'Nothing happened'
 
 @app.route("/newsession")
 def new_session():
     session['sid'] = None   
     return redirect(url_for('home'))
 
-@app.route('/dump')
-def dump_data():
-    #dump all data from mongodb to csv and ship to user
-    db = SESSION_MONGODB
-    list_sessions = [parse_record(doc) for doc in db.session_tracker.sessions.find()]
-    csv = ''.join(list_sessions)
-    return Response(csv,
-                    mimetype="text/csv",
-                    headers={"Content-disposition":"attachment; filename=logs.csv"})
+
 
 def parse_record(record):
     sid = record[u'sid']
