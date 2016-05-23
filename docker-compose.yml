@@ -19,11 +19,8 @@ mongo:
 
 web:
   build: web/.
-  command: python3 -u web/app.py
   ports:
-    - "80:80"
-  volumes:
-    - .:/robo
+    - "80:8000"
   links:
     - mysql:db
     - mongo

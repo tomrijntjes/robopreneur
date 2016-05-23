@@ -4,3 +4,5 @@ pymongo
 numpy
 deap
 pymysql
+flup6
+uwsgi
