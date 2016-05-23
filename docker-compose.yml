@@ -7,6 +7,7 @@ mysql:
   volumes:
     - ./sql:/sql
     - ./init:/docker-entrypoint-initdb.d
+    - ./config:/etc/mysql/conf.d
   volumes_from:
     - data
 
