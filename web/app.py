@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 import os
+import sys
+import logging
+import logging.handlers
 from uuid import uuid4
 import csv
 import time
@@ -16,12 +19,18 @@ from bson import json_util
 
 from config import *
 from gpsql.breeder import Breeder
-
+from loggmail import TlsSMTPHandler
 
 
 
 
 app = Flask(__name__)
+
+
+logger = logging.getLogger()     
+gm = TlsSMTPHandler(("smtp.gmail.com", 587), 'rijntjeslogging@gmail.com', ['tomrijntjes@gmail.com'], 'Error found!', ('rijntjeslogging@gmail.com', os.environ['MYSQL_ROOT_PASSWORD']))
+gm.setLevel(logging.ERROR)
+logger.addHandler(gm)
 
 SESSION_TYPE = 'mongodb'
 SESSION_MONGODB = MongoClient(os.environ['MONGO_1_PORT_27017_TCP_ADDR'],27017)
