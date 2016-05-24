@@ -1,6 +1,6 @@
 <html>
 
-<p>Current Population<a href='/dump/pop'>Download.</a></p>
+<p>Current Population<!--<a href='/dump/pop'>Download.</a></p>-->
 
 <table>
 {% for individual in pop %}
@@ -13,7 +13,19 @@
 {% endfor %}
 </table>
 
-<p>Click events. <a href='/dump/clicks'>Download.</a></p>
+<p>Sessions. <!--<a href='/dump/sessions'>Download.</a>--></p>
+
+<table>
+{% for session in sessions %}
+<TR>
+   <TD class="c1">{{session.datetime}}</TD>
+   <TD class="c2">{{session.instance}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+
+<p>Click events.<!-- <a href='/dump/clicks'>Download.</a>--></p>
 
 <table>
 {% for event in click_events %}
@@ -27,7 +39,7 @@
 {% endfor %}
 </table>
 
-<p>Population changes<a href='/dump/events'>Download.</a></p>
+<p>Population changes<!--<a href='/dump/events'>Download.</a>--></p>
 
 <table>
 {% for event in pop_events %}

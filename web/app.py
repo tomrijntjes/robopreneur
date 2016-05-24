@@ -63,8 +63,10 @@ cursor = get_cursor(3)
 
 @app.route('/')
 def home():
+    new_session = False
     if not 'sid' in session or not session['sid']:
-        session['sid'] = str(uuid4())
+        session['sid'] = str(uuid4()) 
+        new_session = True
     #load population
     pop_size = breeder.mongo.breeder.population.count()
     if pop_size < 10:
@@ -72,6 +74,16 @@ def home():
             breeder.create_individual() 
         return "Initiating a new population. Have fun."
     instance_number = abs(hash(session['sid']))%int(pop_size*1.25)
+    #log session
+    if new_session:
+        SESSION_MONGODB.flask_session.events.insert_one(
+            {
+            'sid':session['sid'],
+            'instance':abs(hash(session['sid']))%int(pop_size*1.25),
+            'datetime':datetime.datetime.now()
+            }
+        )
+
     if instance_number<pop_size:
         instance = breeder.instance(instance_number)
         args = instance['ids']
@@ -99,7 +111,8 @@ def overview():
     pop = list(breeder.mongo.breeder.population.find())
     click_events = list(breeder.mongo.breeder.click_events.find())
     pop_events = list(breeder.mongo.breeder.events.find())
-    page = render_template('population.html',pop=pop,click_events=click_events,pop_events=pop_events)
+    sessions = list(SESSION_MONGODB.flask_session.events.find())
+    page = render_template('population.html',pop=pop,click_events=click_events,pop_events=pop_events,sessions=sessions)
     return page
 
 @app.route('/dump/<dataset>')
