@@ -87,10 +87,9 @@ def home():
                 }
             )
             breeder.write(instance)
-        else:
-            instance = breeder.instance(instance_number)
-            args = instance['ids']
-            query = instance['query']
+        instance = breeder.instance(instance_number)
+        args = instance['ids']
+        query = instance['query']
     else:
         #create pseudorandom selection from the entire set
         SESSION_MONGODB.flask_session.events.insert_one(
