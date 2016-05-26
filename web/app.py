@@ -69,13 +69,15 @@ def home():
         new_session = True
     #load population
     pop_size = breeder.mongo.breeder.population.count()
-    if pop_size < 10:
-        for i in range(10):
-            breeder.create_individual() 
-        return "Initiating a new population. Have fun."
     instance_number = abs(hash(session['sid']))%int(pop_size*1.25)
     #log session
     if new_session:
+        instance = breeder.instance(instance_number)
+        instance['energy']-=0.025
+        breeder.write(instance)
+        if instance['energy']<=0:
+            session['sid'] = None   
+            return redirect(url_for('home'))
         SESSION_MONGODB.flask_session.events.insert_one(
             {
             'sid':session['sid'],
@@ -83,6 +85,7 @@ def home():
             'datetime':datetime.datetime.now()
             }
         )
+        breeder.write(instance)
 
     if instance_number<pop_size:
         instance = breeder.instance(instance_number)
@@ -133,8 +136,8 @@ def dump_data(dataset):
                     mimetype="text/csv",
                     headers={"Content-disposition":"attachment; filename=logs.csv"})
     
-@app.route('/tracking/<product_id>')
-def track(product_id):
+@app.route('/tracking/<product_id>/<price>')
+def track(product_id,price):
     pop_size = breeder.mongo.breeder.population.count()
     instance_number = abs(hash(session['sid']))%int(pop_size*1.25)
     if instance_number>pop_size:
@@ -149,7 +152,7 @@ def track(product_id):
             )
     else:
         instance = breeder.instance(instance_number)
-        instance['energy']+=1
+        instance['energy']+=0.0025*float(price)
         breeder.write(instance)
         #log click event
         breeder.mongo.breeder.click_events.insert_one(
@@ -161,7 +164,8 @@ def track(product_id):
     #update queue
     breeder.update_queue()
     outbound = "http://shopsaloon.com/product/visit/"+product_id
-    return render_template('redirect.html',outbound = outbound)
+    return redirect(outbound,code=302)
+    #return render_template('redirect.html',outbound = outbound)
 
 @app.route("/purge/<pw>")
 def purge_data(pw):
@@ -169,7 +173,10 @@ def purge_data(pw):
         breeder.mongo["breeder"].drop_collection('population')
         breeder.mongo["breeder"].drop_collection('click_events')
         breeder.mongo["breeder"].drop_collection('events')
-        return 'dropped table'
+        SESSION_MONGODB.flask_session.drop_collection('events')
+        for i in range(20):
+            breeder.create_individual() 
+        return 'Fresh population. Have fun!'
     return 'Nothing happened'
 
 @app.route("/newsession")

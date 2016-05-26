@@ -29,7 +29,7 @@ class Breeder:
 	"""
 	Shelve class holding a population.
 	"""
-	def __init__(self,n=10,threshold=12,reproduction_cost=5):
+	def __init__(self,n=50,threshold=0.75,reproduction_cost=0.25):
 		self.queue = list()
 		self.threshold = threshold
 		self.reproduction_cost = reproduction_cost
@@ -63,22 +63,6 @@ class Breeder:
 		self.get_cursor(3)
 		self.cursor.execute('SELECT id FROM gieters')
 		self.all_ids = [value[0] for value in self.cursor.fetchall()]
-		#stop loading pop in working memory
-		"""
-		if "population" in self.mongo.breeder.collection_names():
-			self.population=list()
-			for indi in self.mongo.breeder.population.find():
-				genome=pickle.loads(indi['genome'])
-				self.population.append(
-					{
-					'genome':genome,
-					'energy':indi['energy'],
-					'query':indi['query'],
-					'ids':indi['ids'],
-					'instance_number':indi['instance_number']
-					}
-					)
-		"""
 		self.update_queue()
 
 	def __iter__(self):
@@ -124,7 +108,7 @@ class Breeder:
 		query,ids=self.evaluate(genome)
 		self.mongo.breeder.population.insert_one(
 					{
-						'energy':10,
+						'energy':0.5,
 						'genome': Binary(pickle.dumps(genome)),
 						'query':query,
 						'ids':ids,
@@ -227,36 +211,3 @@ class Breeder:
 	    except:
 	        time.sleep(2)
 	        self.get_cursor(timeout-1)
-
-
-"""	
-
-	def create_individual(self,parent1=None,parent2=None):
-		if not parent1 and not parent2:
-			pop = self.toolbox.population(n=20)
-		else:
-			pop=[parent1,parent2]
-		hof = tools.HallOfFame(1)
-		stats = tools.Statistics(lambda ind: ind.fitness.values)
-		stats.register("avg", numpy.mean)
-		stats.register("std", numpy.std)
-		stats.register("min", numpy.min)
-		stats.register("max", numpy.max)
-		algorithms.eaSimple(pop, self.toolbox, 0.5, 0.2, 40, stats, halloffame=hof)
-		genome = hof[0]
-		query,ids=self.evaluate(genome)
-		energy=0
-		return {'genome':genome,'energy':0,'query':query,'ids':ids}
-
-if __name__ == "__main__":
-	with Breeder(5) as b:
-		while True:
-			b.population[0]['energy']+=1
-			#b.population[-1]['energy']+=1
-			#b.population[-2]['energy']+=1
-			b.update_queue()
-			print(len(b.population))
-			input()
-
-
-"""
