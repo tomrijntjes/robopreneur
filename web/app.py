@@ -54,7 +54,7 @@ def get_cursor(timeout=3):
         cursor = conn.cursor()
         return cursor
     except:
-        time.sleep(10)
+        time.sleep(20)
         get_cursor(timeout-1)
 
 cursor = get_cursor(3)
@@ -71,28 +71,35 @@ def home():
     pop_size = breeder.mongo.breeder.population.count()
     instance_number = abs(hash(session['sid']))%int(pop_size*1.25)
     #log session
-    if new_session:
-        instance = breeder.instance(instance_number)
-        instance['energy']-=0.025
-        breeder.write(instance)
-        if instance['energy']<=0:
-            session['sid'] = None   
-            return redirect(url_for('home'))
-        SESSION_MONGODB.flask_session.events.insert_one(
-            {
-            'sid':session['sid'],
-            'instance':abs(hash(session['sid']))%int(pop_size*1.25),
-            'datetime':datetime.datetime.now()
-            }
-        )
-        breeder.write(instance)
-
     if instance_number<pop_size:
-        instance = breeder.instance(instance_number)
-        args = instance['ids']
-        query = instance['query']
+        if new_session:
+            instance = breeder.instance(instance_number)
+            instance['energy']-=0.025
+            breeder.write(instance)
+            if instance['energy']<=0:
+                session['sid'] = None   
+                return redirect(url_for('home'))
+            SESSION_MONGODB.flask_session.events.insert_one(
+                {
+                'sid':session['sid'],
+                'instance':abs(hash(session['sid']))%int(pop_size*1.25),
+                'datetime':datetime.datetime.now()
+                }
+            )
+            breeder.write(instance)
+        else:
+            instance = breeder.instance(instance_number)
+            args = instance['ids']
+            query = instance['query']
     else:
         #create pseudorandom selection from the entire set
+        SESSION_MONGODB.flask_session.events.insert_one(
+                {
+                'sid':session['sid'],
+                'instance':'control',
+                'datetime':datetime.datetime.now()
+                }
+            )
         query = None
         start = instance_number%len(breeder.all_ids)
         args = breeder.all_ids[start-9:start]

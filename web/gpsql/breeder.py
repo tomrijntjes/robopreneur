@@ -209,5 +209,5 @@ class Breeder:
 	                           db = os.environ['DATABASE'])
 	        self.cursor = self.conn.cursor()
 	    except:
-	        time.sleep(2)
+	        time.sleep(20)
 	        self.get_cursor(timeout-1)
