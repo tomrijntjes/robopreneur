@@ -128,16 +128,16 @@ def overview():
 def dump_data(dataset):
     if dataset=='pop':
         data = list(breeder.mongo.breeder.population.find())
+    elif dataset=='sessions':
+        data = list(SESSION_MONGODB.flask_session.events.find())
     elif dataset=='clicks':
         data = list(breeder.mongo.breeder.click_events.find())
     elif dataset=='events':
         data = list(breeder.mongo.breeder.events.find())
-
-
-
-    raise Exception(data)
-
-    csv = ''.join(data)
+    header = [';'.join(list(data[0].keys()))]
+    values = [';'.join(str(v) for v in _.values()) for _ in data]
+    data = header+values
+    csv = '\r\n'.join(data)
     return Response(csv,
                     mimetype="text/csv",
                     headers={"Content-disposition":"attachment; filename=logs.csv"})
