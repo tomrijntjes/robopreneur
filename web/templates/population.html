@@ -13,28 +13,29 @@
 {% endfor %}
 </table>
 
-<p>Sessions. <a href='/dump/sessions'>Download.</a></p>
+<p>Latest 10 sessions. <a href='/dump/sessions'>Download all sessions.</a></p>
+<p>instance/date/energy change</a></p>
 
 <table>
 {% for session in sessions %}
 <TR>
-   <TD class="c1">{{session.datetime}}</TD>
    <TD class="c2">{{session.instance}}</TD>
+   <TD class="c1">{{session.datetime}}</TD>
+   <TD class="c2">{{session.energy_change}}</TD>
 </TR>
 {% endfor %}
 </table>
 
 
-<p>Click events. <a href='/dump/clicks'>Download.</a></p>
+<p>Latest 10 click events. <a href='/dump/clicks'>Download all.</a></p>
+<p>instance/date/energy change</a></p>
 
 <table>
 {% for event in click_events %}
 <TR>
    <TD class="c1">{{event.instance_number}}</TD>
    <TD class="c2">{{event.datetime}}</TD>
-   <TD class="c3">{{event.energy}}</TD>
-   <TD class="c4"><SPAN>{{event.query}}</SPAN></TD>
-   <TD class="c4"><SPAN>{{event.ids}}</SPAN></TD>
+   <TD class="c3">{{event.energy_change}}</TD>
 </TR>
 {% endfor %}
 </table>

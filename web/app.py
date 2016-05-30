@@ -83,7 +83,8 @@ def home():
                 {
                 'sid':session['sid'],
                 'instance':abs(hash(session['sid']))%int(pop_size*1.25),
-                'datetime':datetime.datetime.now()
+                'datetime':datetime.datetime.now(),
+                'energy_change':-0.0025
                 }
             )
             breeder.write(instance)
@@ -117,19 +118,19 @@ def home():
 
 @app.route('/population')
 def overview():
-    pop = list(breeder.mongo.breeder.population.find())
-    click_events = list(breeder.mongo.breeder.click_events.find())
-    pop_events = list(breeder.mongo.breeder.events.find())
-    sessions = list(SESSION_MONGODB.flask_session.events.find())
+    pop = list(breeder.mongo.breeder.population.find().sort("_id", 1))
+    click_events = list(breeder.mongo.breeder.click_events.find().sort("_id", -1).limit(10))
+    pop_events = list(breeder.mongo.breeder.events.find().sort("_id", -1))
+    sessions = list(SESSION_MONGODB.flask_session.events.find().sort("_id", -1).limit(10))
     page = render_template('population.html',pop=pop,click_events=click_events,pop_events=pop_events,sessions=sessions)
     return page
 
 @app.route('/dump/<dataset>')
 def dump_data(dataset):
     if dataset=='pop':
-        data = list(breeder.mongo.breeder.population.find())
+        data = list(breeder.mongo.breeder.population.find().sort("_id", 1))
     elif dataset=='sessions':
-        data = list(SESSION_MONGODB.flask_session.events.find())
+        data = list(SESSION_MONGODB.flask_session.events.find().sort("_id", -1))
     elif dataset=='clicks':
         data = list(breeder.mongo.breeder.click_events.find())
     elif dataset=='events':
@@ -164,7 +165,8 @@ def track(product_id,price):
         breeder.mongo.breeder.click_events.insert_one(
             {
             'instance_number':instance_number,
-            'datetime':datetime.datetime.now()
+            'datetime':datetime.datetime.now(),
+            'energy_change':0.0025*float(price)
             }
         )   
     #update queue
