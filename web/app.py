@@ -143,10 +143,10 @@ def dump_data(dataset):
                     mimetype="text/csv",
                     headers={"Content-disposition":"attachment; filename=logs.csv"})
     
-@app.route('/tracking/<product_id>/<price>')
-def track(product_id,price):
+@app.route('/tracking/<product_id>/<price>/<instance>')
+def track(product_id,price,instance):
     pop_size = breeder.mongo.breeder.population.count()
-    instance_number = abs(hash(session['sid']))%int(pop_size*1.25)
+    instance_number = int(instance)
     if instance_number>pop_size:
         #random page led to conversion event
         start = instance_number%len(breeder.all_ids)
@@ -154,7 +154,9 @@ def track(product_id,price):
         breeder.mongo.breeder.click_events.insert_one(  
                 {
                 'instance_number':'random',
-                'datetime':datetime.datetime.now()
+                'datetime':datetime.datetime.now(),
+                'product':product_id
+
                 }
             )
     else:
@@ -166,7 +168,8 @@ def track(product_id,price):
             {
             'instance_number':instance_number,
             'datetime':datetime.datetime.now(),
-            'energy_change':0.0025*float(price)
+            'energy_change':0.0025*float(price),
+            'product':product_id
             }
         )   
     #update queue
