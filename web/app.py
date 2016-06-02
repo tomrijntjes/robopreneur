@@ -74,7 +74,7 @@ def home():
     if instance_number<pop_size:
         if new_session:
             instance = breeder.instance(instance_number)
-            instance['energy']-=0.0025
+            instance['energy']-=0.025
             breeder.write(instance)
             if instance['energy']<=0:
                 session['sid'] = None   
@@ -161,7 +161,7 @@ def track(product_id,price,instance):
             )
     else:
         instance = breeder.instance(instance_number)
-        instance['energy']+=0.025*float(price)
+        instance['energy']+=0.0025*float(price)
         breeder.write(instance)
         #log click event
         breeder.mongo.breeder.click_events.insert_one(
