@@ -84,7 +84,7 @@ def home():
                 'sid':session['sid'],
                 'instance':abs(hash(session['sid']))%int(pop_size*1.25),
                 'datetime':datetime.datetime.now(),
-                'energy_change':-0.0025
+                'energy_change':-0.025
                 }
             )
             breeder.write(instance)
