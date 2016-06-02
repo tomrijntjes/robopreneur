@@ -141,7 +141,7 @@ def dump_data(dataset):
     csv = '\r\n'.join(data)
     return Response(csv,
                     mimetype="text/csv",
-                    headers={"Content-disposition":"attachment; filename=logs.csv"})
+                    headers={"Content-disposition":"attachment; filename={0}.csv".format(dataset)})
     
 @app.route('/tracking/<product_id>/<price>/<instance>')
 def track(product_id,price,instance):
