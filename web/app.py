@@ -180,7 +180,7 @@ def track(product_id,price,instance):
 
 @app.route("/purge/<pw>")
 def purge_data(pw):
-    if pw == os.environ['DATABASE']:
+    if pw == os.environ['MYSQL_ROOT_PASSWORD']:
         breeder.mongo["breeder"].drop_collection('population')
         breeder.mongo["breeder"].drop_collection('click_events')
         breeder.mongo["breeder"].drop_collection('events')

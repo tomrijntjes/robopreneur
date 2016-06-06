@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "Beginning daily backup"
+cd ~/robopreneur
+docker exec robopreneur_mongo_1 mongodump --db breeder --collection click_events --out - | gzip > click_events.gz
+docker exec robopreneur_mongo_1 mongodump --db breeder --collection events --out - | gzip > events.gz
+docker exec robopreneur_mongo_1 mongodump --db breeder --collection population --out - | gzip > population.gz
+docker exec robopreneur_mongo_1 mongodump --db flask_session --collection events --out - | gzip > session_events.gz
+docker exec robopreneur_mongo_1 mongodump --db flask_session --collection sessions --out - | gzip > sessions.gz
+echo "Completed"
+
+
