@@ -135,10 +135,18 @@ def dump_data(dataset):
         data = list(breeder.mongo.breeder.click_events.find())
     elif dataset=='events':
         data = list(breeder.mongo.breeder.events.find())
-    header = [';'.join(list(data[0].keys()))]
-    values = [';'.join(str(v) for v in _.values()) for _ in data]
-    data = header+values
-    csv = '\r\n'.join(data)
+    header = list(data[0].keys())
+    result = list()
+    result.append(';'.join(header))
+    for row in data:
+        raw = ''
+        for column in header:
+            try:
+                raw+=str(row[column])+';'
+            except IndexError:
+                raw+=';'
+        result.append(raw)
+    csv = '\r\n'.join(result)
     return Response(csv,
                     mimetype="text/csv",
                     headers={"Content-disposition":"attachment; filename={0}.csv".format(dataset)})
