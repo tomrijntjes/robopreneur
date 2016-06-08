@@ -143,7 +143,7 @@ def dump_data(dataset):
         for column in header:
             try:
                 raw+=str(row[column])+';'
-            except IndexError:
+            except KeyError:
                 raw+=';'
         result.append(raw)
     csv = '\r\n'.join(result)
