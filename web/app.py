@@ -129,13 +129,16 @@ def overview():
 def dump_data(dataset):
     if dataset=='pop':
         data = list(breeder.mongo.breeder.population.find().sort("_id", 1))
+        header = ['query','instance_number','ids','genome','energy','_id']
     elif dataset=='sessions':
         data = list(SESSION_MONGODB.flask_session.events.find().sort("_id", -1))
+        header = ['sid','datetime','instance','energy_change','_id']
     elif dataset=='clicks':
         data = list(breeder.mongo.breeder.click_events.find())
+        header = ['instance_number','datetime','_id','energy_change']
     elif dataset=='events':
         data = list(breeder.mongo.breeder.events.find())
-    header = list(data[0].keys())
+        header = ['parent2','datetime','parent1','instance_number','_id','type']
     result = list()
     result.append(';'.join(header))
     for row in data:
